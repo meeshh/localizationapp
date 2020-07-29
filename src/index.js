@@ -4,14 +4,20 @@ import './index.css';
 import App from './App';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n'
+import DirectionProvider from 'react-with-direction/dist/DirectionProvider';
 import * as serviceWorker from './serviceWorker';
+import { DirProvider } from './directioncontext';
 
 ReactDOM.render(
-  <I18nextProvider i18n={i18n}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </I18nextProvider>,
+  <DirProvider>
+  {/* <DirectionProvider direction={DIRECTIONS.ltr}> */}
+    <I18nextProvider i18n={i18n}>
+
+        <App />
+
+    </I18nextProvider>
+  {/* </DirectionProvider> */}
+  </DirProvider>,
   document.getElementById('root')
 );
 

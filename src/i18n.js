@@ -2,6 +2,7 @@ import i18n from 'i18next'
 import LanguageDetector from "i18next-browser-languagedetector"
 import { initReactI18next } from 'react-i18next'
 import XHR from 'i18next-xhr-backend'
+
 import languageEN from './locate/en/translate.json'
 import languageAR from './locate/ar/translate.json'
 
@@ -19,7 +20,7 @@ i18n
   /* When react i18next not finding any language to as default in borwser */
   fallbackLng: "en",
   /* debugger For Development environment */
-  debug: true,
+  debug: false,
   ns: ["translations"],
   defaultNS: "translations",
   keySeparator: ".",
