@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n'
-import DirectionProvider from 'react-with-direction/dist/DirectionProvider';
+import i18n from './i18n';
 import * as serviceWorker from './serviceWorker';
 import { DirProvider } from './directioncontext';
 

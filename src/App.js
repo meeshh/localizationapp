@@ -1,10 +1,13 @@
 import React, { useState, useContext } from 'react';
 import './App.css';
 
+import { TableContainer, TableRow, TableCell, TableBody, Table, Paper, RadioGroup, FormControlLabel, Radio, Typography, ThemeProvider, createMuiTheme } from '@material-ui/core';
 import { withTranslation, Trans } from 'react-i18next'
 import { DirectionContext } from './directioncontext';
 import { DIRECTIONS } from 'react-with-direction/dist/constants';
 import DirectionProvider from 'react-with-direction/dist/DirectionProvider';
+
+import { useStyles } from './styles'
 
 function App(props) {
   const [languageState, setLanguageState] = useState({ value: 'en' });
@@ -17,57 +20,64 @@ function App(props) {
 
     dispatch({
       type: 'CHANGE_DIRECTION',
-      payload: { direction: newLang === 'ar' ? DIRECTIONS.RTL : DIRECTIONS.LTR}
+      payload: { direction: newLang === 'ar' ? DIRECTIONS.RTL : DIRECTIONS.LTR }
     });
   }
 
-  const renderRadioButtons = () => {
-    return (<div>
-      <input
-        checked={languageState.value === 'en'}
-        name="language"
-        onChange={(e) => onLanguageHandle(e)}
-        value="en"
-        type="radio" />English &nbsp;
-      <input
-        name="language"
-        value="ar"
-        checked={languageState.value === 'ar'}
-        type="radio"
-        onChange={(e) => onLanguageHandle(e)}
-      />Arabic
-    </div>)
-  }
 
-  const { t } = props
+
+  const { t } = props;
+
+  const classes = useStyles();
+
+  const theme = createMuiTheme({
+    direction: 'rtl',
+    overrides: {
+      //this is to override the text alignment inside the table component of material ui
+      MuiTableCell: {
+        root: {
+          textAlign: state.direction === DIRECTIONS.RTL ? 'right' : 'left'
+        }
+      }
+    }
+  });
+
   return (
     <DirectionProvider direction={state.direction}>
-      <div className="App">
-        {renderRadioButtons()}
-        <h1><Trans>Paragraph</Trans></h1>
-        <table>
-          <tbody>
-            <tr>
-              <td style={{ width: '20%' }}>
-                {t('author.title')}
-              </td>
-              <td style={{ width: '5%' }}>:</td>
-              <td style={{ width: '75%' }}>
-                {t('author.value')}
-              </td>
-            </tr>
-            <tr>
-              <td style={{ width: '20%' }}>
-                {t('description.title')}
-              </td>
-              <td style={{ width: '5%' }}>:</td>
-              <td style={{ width: '75%' }}>
-                {t('description.value')}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <ThemeProvider theme={theme}>
+        <div className="App" dir={state.direction}>
+  
+          <RadioGroup aria-label="language" name="language" value={languageState.value} onChange={onLanguageHandle}>
+            <FormControlLabel value="en" control={<Radio />} label="English" />
+            <FormControlLabel value="ar" control={<Radio />} label="Arabic" />
+          </RadioGroup>
+  
+          <Typography variant="h1"><Trans>Paragraph</Trans></Typography>
+  
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableBody>
+                <TableRow>
+                  <TableCell scope="row">
+                    {t('author.title')}
+                  </TableCell>
+                  <TableCell>
+                    {t('author.value')}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell scope="row">
+                    {t('description.title')}
+                  </TableCell>
+                  <TableCell>
+                    {t('description.value')}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      </ThemeProvider>
     </DirectionProvider>
   );
 
